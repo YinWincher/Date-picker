@@ -15,19 +15,41 @@
     display: flex;
     align-items: center;
     width:174px;
+    /*padding-left: 30px;*/
     height:32px;
 }
 
 
-.picker-panel .input .iconfont{
+
+.picker-panel .input .rili{
     display: inline-block;
     position: absolute;
-    right: 14px;
+    left: 8px;
+}
+.picker-panel .input .delete{
+    display: none;
+}
+.picker-panel .input:hover .delete{
+    position: absolute;
+    display: block;
+    right:8px;
+    color: #888888;
+    cursor: pointer;
 }
 .picker-panel .input input{
     border: 0;
-    padding: 4px 11px;
+    padding: 4px 30px;
     outline: medium;
     width: 174px;
     /*display: inline-block;*/
+}
+.picker-panel .calendar{
+    position: absolute;
+}
+.picker-panel .calendar.under-input{
+    top:35px;
+
+}
+.picker-panel .calendar.above-input{
+    bottom: 35px;
 }

@@ -1,18 +1,24 @@
 import React,{Component} from 'react';
 import '../css/date-picker.css'
 import '../css/icont/iconfont.css';
-import {isParentOfTarget} from '../lib/lib';
+import { isParentOfTarget} from '../util/lib';
 import Calendar from '../component/Calendar';
+import {isFunction} from "../util/isType";
+
 class DatePicker extends  Component{
     constructor(props){
         super(props);
         this.state = {
             showPanel : false,
-            date : new Date(),
+            selectDate : {},
             inputValue : ''
         }
+        this.input = React.createRef();
     }
-    showPanel = (event)=>{
+    static defaultProps ={
+        placeholder : '请选择日期'
+    }
+    closePanel = (event)=>{
         if(isParentOfTarget('div.picker-panel',event.target)){
             return ;
         }
@@ -22,46 +28,72 @@ class DatePicker extends  Component{
             });
         }
     }
+
     handleShowPanel = ()=>{
+        if(this.state.showPanel){
+            return;
+        }
         this.setState({
             showPanel : true
         });
     }
-    handlePickDate = (event)=>{
-        const {title} = event.target;
-        const date = title.split('-');
+    handleDeleteDate = (event)=>{
+        event.stopPropagation();
+        const {onChange} = this.props ;
         this.setState({
-            date : new Date(date[0],date[1]-1,date[2]),
+            inputValue : '',
+            selectDate : {},
+            showPanel : false
+        });
+        if(isFunction(onChange)){
+            onChange(null,'');
+        }
+    }
+    handlePickDate = (event)=>{
+        const {title} = event.currentTarget;
+        let {disabled} = event.currentTarget.dataset;
+        const {onChange} = this.props ;
+        if(disabled ==="true"){
+            return ;
+        }
+        let date = title.split('-');
+        date = new Date(date[0],date[1]-1,date[2])
+        this.setState({
+            selectDate : date,
             showPanel : false,
             inputValue : title
         })
+        if(isFunction(onChange)){
+            onChange(date,title);
+        }
     }
     componentDidMount(){
-        document.body.addEventListener('click',this.showPanel);
+        document.body.addEventListener('click',this.closePanel);
     }
     componentWillMount(){
-        document.body.removeEventListener('click',this.showPanel);
+        document.body.removeEventListener('click',this.closePanel);
     }
     render(){
-        const {showPanel,date,inputValue} = this.state;
+        const {showPanel,inputValue,selectDate} = this.state;
+        const {disabledDate,defaultDate,showToday=false,placeholder} = this.props;
         return (
             <div className="picker-panel" >
-                <div className="input" onClick={this.handleShowPanel}>
-                    <i className="iconfont icon-rili"></i>
-                    <input type="text" placeholder="请输入日期"  value={inputValue} />
+                <div className="input" ref={this.input} onClick={this.handleShowPanel}>
+                    <i className="iconfont icon-rili rili"></i>
+                    <input type="text" readOnly={true} placeholder={placeholder}  value={inputValue} />
+                    {inputValue ? <i onClick={this.handleDeleteDate} className="iconfont icon-delete delete"></i> : ''}
                 </div>
-                {showPanel ? <Calendar date={date} handlePickDate={this.handlePickDate} /> : ''}
-            </div>
+                    {showPanel ? <Calendar
+                                            input={this.input}
+                                            showToday={showToday}
+                                           disabledDate={disabledDate}
+                                           selectDate={selectDate}
+                                           defaultDate={defaultDate}
+                                           handlePickDate={this.handlePickDate}
+                    /> : ''}
+                </div>
         )
     }
 }
-function canShowPanelUnder(panel,input){
-    const calenHeight = panel.offsetHeight;
-    console.log(calenHeight);
-    const windowHeight = window.innerHeight;
-    const {bottom} = input.getBoundingClientRect();
-    const toBottomLen = windowHeight-bottom;
-    const canShowPanelUnder = toBottomLen >= calenHeight ;
-    return canShowPanelUnder;
-}
+
 export default DatePicker;

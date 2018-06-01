@@ -7,7 +7,7 @@ body{
     box-sizing: border-box;
 }
 .App {
-    height: 100vh;
+    height: 200vh;
   text-align: center;
   display:flex;
   align-items: center;

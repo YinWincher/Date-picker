@@ -30,4 +30,4 @@
     onChange={onChange}
 />
 ```
-![](范围日期选择器.png)
+![](https://github.com/YinWincher/data-picker/blob/master/%E5%8D%95%E4%B8%AA%E6%97%A5%E6%9C%9F%E9%80%89%E6%8B%A9.png)

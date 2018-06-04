@@ -1,6 +1,6 @@
 # data-picker
 
-###[demo](https://yinwincher.github.io/date-picker/)
+### [demo](https://yinwincher.github.io/date-picker/)
 
 ### 单个日期选择器
 

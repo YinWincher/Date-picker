@@ -1,4 +1,4 @@
-# data-picker
+# date-picker
 
 ### [demo](https://yinwincher.github.io/date-picker/)
 

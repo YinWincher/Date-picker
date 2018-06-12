@@ -51,11 +51,7 @@ class DatePicker extends  Component{
     }
     handlePickDate = (event)=>{
         const {title} = event.currentTarget;
-        let {disabled} = event.currentTarget.dataset;
         const {onChange} = this.props ;
-        if(disabled ==="true"){
-            return ;
-        }
         let date = title.split('-');
         date = new Date(date[0],date[1]-1,date[2])
         this.setState({
@@ -76,21 +72,28 @@ class DatePicker extends  Component{
     render(){
         const {showPanel,inputValue,selectDate} = this.state;
         const {disabledDate,defaultDate,showToday=false,placeholder} = this.props;
+
         return (
             <div className="picker-panel" >
                 <div className="input" ref={this.input} onClick={this.handleShowPanel}>
                     <i className="iconfont icon-rili rili"></i>
                     <input type="text" readOnly={true} placeholder={placeholder}  value={inputValue} />
-                    {inputValue ? <i onClick={this.handleDeleteDate} className="iconfont icon-delete delete"></i> : ''}
+                    {inputValue
+                        ? <i onClick={this.handleDeleteDate} className="iconfont icon-delete delete" />
+                        : ''
+                    }
                 </div>
-                    {showPanel ? <Calendar
-                                            input={this.input}
-                                            showToday={showToday}
-                                           disabledDate={disabledDate}
-                                           selectDate={selectDate}
-                                           defaultDate={defaultDate}
-                                           handlePickDate={this.handlePickDate}
-                    /> : ''}
+                    {showPanel
+                        ?
+                        <Calendar
+                            input={this.input}
+                            showToday={showToday} disabledDate={disabledDate}
+                            selectDate={selectDate}
+                            defaultDate={defaultDate}
+                            handlePickDate={this.handlePickDate}
+                        />
+                        : ''
+                    }
                 </div>
         )
     }

@@ -103,10 +103,6 @@ class RangeDatePicker extends  Component{
         const {onRangeChange} = this.props;
         const {title} = event.currentTarget;
         const {selectDates} = this.state;
-        // let {disabled} = event.currentTarget.dataset;
-        // if(disabled ==="true"){
-        //     return ;
-        // }
         //数组中有1/0个元素  有1个元素 >/< 下一个元素
         let dat = title.split('-');
         let date = new Date(dat[0],dat[1]-1,dat[2]);
@@ -133,8 +129,6 @@ class RangeDatePicker extends  Component{
             }
             if( isSameMonth(selectDates[0],date) && isSameYear(selectDates[0],date)){
                 let dat = getNextMonth(date);
-                // let dat = new Date(date.toDateString());
-                // dat.setMonth(dat.getMonth()+1);
                 this.setState({
                     leftPanelDate : new Date(this.state.selectDates[0].toDateString()),
                     rightPanelDate : new Date(dat.toDateString())
@@ -151,7 +145,7 @@ class RangeDatePicker extends  Component{
     componentDidMount(){
         document.body.addEventListener('click',this.closePanel);
     }
-    componentWillMount(){
+    componentWillUnmount(){
         document.body.removeEventListener('click',this.closePanel);
     }
     render(){
@@ -186,7 +180,6 @@ class RangeDatePicker extends  Component{
                     selectDate={selectDates || {}}
                     showNext={true}
                     showPre={!isPreMonth(leftPanelDate,rightPanelDate)}
-                    // defaultDate={defaultDate}
                     handlePickDate={this.handlePickDate}
                 />}
             </div>

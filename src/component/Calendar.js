@@ -13,10 +13,9 @@ const CalendarBody = (props)=>{
             const isDisabled = (disabledDate) ? disabledDate(val) : false;
             return (
                 <td
-                    data-disabled={isDisabled}
                     className={getTrClassName(val,date,selectDate,isDisabled)}
                     key={title}
-                    onClick={handlePickDate}
+                    onClick={isDisabled?null:handlePickDate}
                     title={title}>
                     {val.getDate()}
                 </td>
@@ -29,26 +28,6 @@ const CalendarBody = (props)=>{
                 </tr>
             )
         }
-        // for(let i=0;i<6;i++){
-        //     let items = (
-        //         <tr key={trKey++}>
-        //             {dateArray.splice(0,7).map((val)=>{
-        //                 const isDisabled = (disabledDate) ? disabledDate(val) : false;
-        //                 return (
-        //                     <td
-        //                         data-disabled={isDisabled}
-        //                         className={getTrClassName(val,date,selectDate,isDisabled)}
-        //                         key={tdKey++}
-        //                         onClick={handlePickDate}
-        //                         title={`${val.getFullYear()}-${val.getMonth()+1}-${val.getDate()}`}>
-        //                         {val.getDate()}
-        //                     </td>
-        //                 );
-        //             })}
-        //         </tr>
-        //     );
-        //     body.push(items);
-        // }
         return (
             <div className="calendar-body">
                 <table>
@@ -77,15 +56,15 @@ CalendarBody.propTypes = {
     disabledDate : PropTypes.func
 }
 const CalendarHeader = (props)=>{
-        const {date,handleCalendarChange,showNext=true,showPre=true} = props;
+        const {date,handleCalendarChange} = props;
         return (
             <div className="calendar-header">
-                {showPre ? <i className="iconfont icon-arrowleftdl" onClick={handleCalendarChange} data-change="toPreYear"></i> : ''}
-                {showPre ? <i className="iconfont icon-arrowleftl" onClick={handleCalendarChange} data-change="toPreMonth"></i> : ''}
+                <i className="iconfont icon-arrowleftdl" onClick={handleCalendarChange} data-change="toPreYear"></i>
+                <i className="iconfont icon-arrowleftl" onClick={handleCalendarChange} data-change="toPreMonth"></i>
                 <span>{date.getFullYear()}年</span>
                 <span>{date.getMonth()+1}月</span>
-                {showNext ? <i className="iconfont icon-arrowrightl" onClick={handleCalendarChange} data-change="toNextMonth"></i> : ''}
-                {showNext ? <i className="iconfont icon-arrowrightdl" onClick={handleCalendarChange} data-change="toNextYear"></i> : ''}
+                <i className="iconfont icon-arrowrightl" onClick={handleCalendarChange} data-change="toNextMonth"></i>
+                <i className="iconfont icon-arrowrightdl" onClick={handleCalendarChange} data-change="toNextYear"></i>
             </div>
         );
 }
@@ -172,11 +151,26 @@ export default class Calendar extends Component{
         const now = new Date();
         return (
             <div ref={this.calendar} className={`calendar-panel ${(showUnder)?'under-input':'above-input'}`}>
-                <CalendarHeader date={date} handleCalendarChange={this.handleCalendarChange}></CalendarHeader>
-                <CalendarBody disabledDate={disabledDate} date={date} selectDate={selectDate} handlePickDate={handlePickDate}></CalendarBody>
-                {showToday ? <div className="today">
-                                <div title={`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`} onClick={handlePickDate}>今天</div>
-                             </div> : ''}
+                <CalendarHeader
+                    date={date}
+                    handleCalendarChange={this.handleCalendarChange}
+                />
+                <CalendarBody
+                    disabledDate={disabledDate}
+                    date={date}
+                    selectDate={selectDate}
+                    handlePickDate={handlePickDate}
+                />
+                {showToday
+                    ?
+                    <div className="today">
+                        <div
+                            title={`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`}
+                            onClick={handlePickDate}
+                        >今天</div>
+                    </div>
+                    : ''
+                }
             </div>
         );
     }
@@ -199,6 +193,7 @@ function canShowPanelUnder(panel,input){
     const canShowPanelUnder = toBottomLen >= calenHeight ;
     return canShowPanelUnder;
 }
+
 function getTrClassName(trDate,date,selectDate,isDisabled) {
     if(!isDate(trDate)){
         return ;

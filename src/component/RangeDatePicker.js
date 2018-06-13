@@ -29,7 +29,8 @@ class RangeDatePicker extends  Component{
         if(this.state.showPanel){
             this.setState({
                 showPanel : false,
-                selectDates : [...this.state.preSelectDates]
+                selectDates : [...this.state.preSelectDates],
+                hoverValues:[]
             });
         }
     }
